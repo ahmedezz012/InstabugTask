@@ -25,13 +25,14 @@ class LocalDataSource(var sqliteHelper: SQLiteHelper) : ILocalDataSource {
         return arrayList
     }
 
-    override fun deleteAll() {
-        sqliteHelper.deleteAll()
+    override fun deleteAll(): Int {
+       return sqliteHelper.deleteAll()
     }
 
-    override fun insertAll(wordsCount: ArrayList<WordsCount>) {
-        sqliteHelper.insertAll(wordsCount)
+    override fun insertAll(wordsCount: ArrayList<WordsCount>): ArrayList<Long> {
+        val listOfIds = sqliteHelper.insertAll(wordsCount)
         sqliteHelper.close()
+        return listOfIds
     }
 
     override fun update(wordsCount: ArrayList<WordsCount>) {

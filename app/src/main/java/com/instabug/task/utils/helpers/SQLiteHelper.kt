@@ -6,6 +6,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import com.instabug.task.data.model.WordsCount
 import com.instabug.task.utils.Constants.DataBase.BYTE_ARRAY_SIZE
 import com.instabug.task.utils.Constants.DataBase.COLUMN_COUNT
@@ -100,19 +101,24 @@ class SQLiteHelper(var context: Context, name: String, version: Int) :
         return FULL_DB_PATH
     }
 
-    fun insertAll(wordsCount: ArrayList<WordsCount>) {
+    fun insertAll(wordsCount: ArrayList<WordsCount>): ArrayList<Long> {
+        val listOfIds = arrayListOf<Long>()
         try {
             sqLiteDatabase?.beginTransaction()
             val values = ContentValues()
             for (item in wordsCount) {
                 values.put(COLUMN_WORD, item.word)
                 values.put(COLUMN_COUNT, item.count)
-                sqLiteDatabase?.insert(WORDS_TABLE_NAME, null, values)
+                val id: Long? = sqLiteDatabase?.insert(WORDS_TABLE_NAME, null, values)
+                id?.let {
+                    listOfIds.add(it)
+                }
             }
             sqLiteDatabase?.setTransactionSuccessful()
         } finally {
             sqLiteDatabase?.endTransaction()
         }
+        return listOfIds
     }
 
     fun selectAll(): Cursor? {
@@ -122,12 +128,15 @@ class SQLiteHelper(var context: Context, name: String, version: Int) :
         );
     }
 
-    fun deleteAll() {
-        try {
-            sqLiteDatabase?.execSQL(DELETE_ALL_QUERY)
+    fun deleteAll(): Int {
+        val numberOfDeletedRows: Int?
+        numberOfDeletedRows = try {
+            sqLiteDatabase?.delete(WORDS_TABLE_NAME, null, null)
         } catch (exc: java.lang.Exception) {
             exc.printStackTrace()
+            0
         }
+        return numberOfDeletedRows ?: 0
     }
 
 }
