@@ -1,8 +1,8 @@
-package com.instabug.task.data.locale
+package com.instabug.task.data.local
 
 import com.instabug.task.data.model.WordsCount
 
-interface ILocaleDataSource {
+interface ILocalDataSource {
 
     fun selectAll(): ArrayList<WordsCount>?
     fun deleteAll()

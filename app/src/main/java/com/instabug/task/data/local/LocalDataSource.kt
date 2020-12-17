@@ -1,13 +1,12 @@
-package com.instabug.task.data.locale
+package com.instabug.task.data.local
 
-import android.content.Context
 import android.database.Cursor
 import com.instabug.task.data.model.WordsCount
 import com.instabug.task.utils.Constants.DataBase.COLUMN_COUNT_INDEX
 import com.instabug.task.utils.Constants.DataBase.COLUMN_WORD_INDEX
 import com.instabug.task.utils.helpers.SQLiteHelper
 
-class LocalDataSource(var sqliteHelper: SQLiteHelper) : ILocaleDataSource {
+class LocalDataSource(var sqliteHelper: SQLiteHelper) : ILocalDataSource {
     override fun selectAll(): ArrayList<WordsCount>? {
         val arrayList = arrayListOf<WordsCount>()
         val cursor: Cursor? = sqliteHelper.selectAll()

@@ -1,7 +1,7 @@
 package com.instabug.task.utils.helpers
 
 import android.content.Context
-import com.instabug.task.data.locale.LocalDataSource
+import com.instabug.task.data.local.LocalDataSource
 import com.instabug.task.data.remote.RemoteDataSource
 import com.instabug.task.ui.words.WordsRepository
 import com.instabug.task.utils.Constants

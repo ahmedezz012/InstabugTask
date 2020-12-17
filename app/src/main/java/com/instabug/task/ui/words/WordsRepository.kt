@@ -1,7 +1,7 @@
 package com.instabug.task.ui.words
 
 import android.content.Context
-import com.instabug.task.data.locale.ILocaleDataSource
+import com.instabug.task.data.local.ILocalDataSource
 import com.instabug.task.data.model.Status
 import com.instabug.task.data.model.WordsCount
 import com.instabug.task.data.remote.IRemoteDataSource
@@ -10,7 +10,7 @@ import com.instabug.task.utils.Utils
 class WordsRepository(
     var context: Context,
     var iRemoteDataSource: IRemoteDataSource,
-    var iLocalDataSource: ILocaleDataSource
+    var iLocalDataSource: ILocalDataSource
 ) {
 
     fun getWordsList(): Status<ArrayList<WordsCount>> {
