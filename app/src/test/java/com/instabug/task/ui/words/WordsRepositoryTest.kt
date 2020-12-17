@@ -2,7 +2,9 @@ package com.instabug.task.ui.words
 
 import android.content.Context
 import com.instabug.task.data.local.ILocalDataSource
+import com.instabug.task.data.model.Status
 import com.instabug.task.data.model.StatusCode
+import com.instabug.task.data.model.WordsCount
 import com.instabug.task.data.remote.IRemoteDataSource
 import com.instabug.task.utils.Utils
 import io.mockk.MockKAnnotations
@@ -51,12 +53,18 @@ class WordsRepositoryTest {
     fun `given network, when call Repo_getWordsList, then return status Success`() {
         //GIVEN
         every { Utils.checkConnection(context) }.answers { true }
-
+        every { remoteDataSource.callInstaBug() }.answers {
+            arrayListOf(
+                WordsCount("word1", 2),
+                WordsCount("word2", 3)
+            )
+        }
         //WHEN
         val actualWordsListStatus = wordsRepository.getWordsList()
 
         //THEN
         assertEquals(StatusCode.SUCCESS, actualWordsListStatus.statusCode)
+        assertEquals(actualWordsListStatus.data!!.size, 2)
     }
 
     @Test
@@ -76,12 +84,18 @@ class WordsRepositoryTest {
     fun `given no network and there is offline data, when call Repo_getWordsList, then return status Offline data`() {
         //GIVEN
         every { Utils.checkConnection(context) }.answers { false }
-        every { localDataSource.selectAll()?.size!! > 0 }.answers { true }
+        every { localDataSource.selectAll() }.answers {
+            arrayListOf(
+                WordsCount("word1", 2),
+                WordsCount("word2", 3)
+            )
+        }
 
         //WHEN
         val actualWordsListStatus = wordsRepository.getWordsList()
 
         //THEN
         assertEquals(StatusCode.OFFLINE_DATA, actualWordsListStatus.statusCode)
+        assertEquals(actualWordsListStatus.data!!.size, 2)
     }
 }
